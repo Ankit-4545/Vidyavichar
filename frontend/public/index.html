@@ -3,9 +3,65 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VidyaVichar</title>
+    <title>VidyaVichar - Live Questions & Answers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* Add smooth loading animation */
+      #root {
+        opacity: 0;
+        animation: fadeInApp 0.8s ease-out 0.2s forwards;
+      }
+      
+      @keyframes fadeInApp {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      /* Loading spinner for initial load */
+      .initial-loader {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        color: white;
+        font-family: 'Inter', sans-serif;
+        text-align: center;
+      }
+      
+      .initial-loader::before {
+        content: '⟳';
+        font-size: 2rem;
+        display: block;
+        animation: spin 2s linear infinite;
+        margin-bottom: 10px;
+      }
+      
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
+    <div class="initial-loader">
+      Loading VidyaVichar...
+    </div>
     <div id="root"></div>
+    
+    <script>
+      // Remove loader when React app mounts
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const loader = document.querySelector('.initial-loader');
+          if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 300);
+          }
+        }, 1000);
+      });
+    </script>
   </body>
 </html>

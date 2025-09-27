@@ -1,183 +1,613 @@
-/* :root {
-    --bg: #f6f7fb;
-    --note1: #fff9c4;
-    --note2: #ffcdd2;
-    --note3: #c8e6c9
-}
-
 * {
-    box-sizing: border-box
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: Inter, Arial, Helvetica, sans-serif;
-    background: var(--bg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    overflow-x: hidden;
     margin: 0;
-    padding: 20px
+    padding: 0;
 }
 
-.app {
-    max-width: 1100px;
-    margin: 0 auto
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+/* Animated background elements */
+.bg-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-shape:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-shape:nth-child(2) {
+    width: 120px;
+    height: 120px;
+    top: 60%;
+    right: 10%;
+    animation-delay: 2s;
+}
+
+.floating-shape:nth-child(3) {
+    width: 60px;
+    height: 60px;
+    top: 80%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Header - More opaque and much smaller */
 .header {
+    text-align: center;
+    padding: 8px; /* Further reduced from 15px */
+    background: rgba(234, 234, 237, 0.95); /* More opaque - was 0.1 */
+    backdrop-filter: blur(20px); /* Increased blur */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin-bottom: 0;
+    animation: slideInDown 0.8s ease-out;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header h1 {
+    font-size: 1.6rem; /* Further reduced from 2.2rem */
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea, #764ba2); /* Changed to match theme */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2px; /* Further reduced from 5px */
+    text-shadow: none; /* Removed shadow for cleaner look */
+}
+
+.header p {
+    color: rgba(102, 126, 234, 0.8); /* Changed to theme color */
+    font-size: 0.8rem; /* Further reduced from 1rem */
+    font-weight: 300;
+    margin: 0;
+}
+
+/* Question Form - Much smaller and more opaque */
+.question-form-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 5px 10px; /* Further reduced from 15px 20px */
+    backdrop-filter: blur(20px); /* Increased blur */
+    position: sticky;
+    top: 20px; /* Adjusted for much smaller header */
+    z-index: 99;
+    animation: slideInUp 0.8s ease-out;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.form {
+    background: rgba(255, 255, 255, 0.98); /* More opaque */
+    backdrop-filter: blur(25px); /* Increased blur */
+    padding: 12px; /* Further reduced from 20px */
+    border-radius: 10px; /* Smaller radius */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08); /* Reduced shadow */
+    max-width: 500px; /* Further reduced from 550px */
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.4); /* More visible border */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+}
+
+.form textarea {
+    width: 100%;
+    padding: 5px 5px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background: #fafbfc;
+}
+
+.form textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: white;
+}
+
+.form input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    margin-top: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background: #fafbfc;
+}
+
+.form input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: white;
+}
+
+.form-actions {
     display: flex;
     justify-content: space-between;
-    align-items: center
+    align-items: center;
+    margin-top: 20px;
+    gap: 15px;
 }
 
-.board {
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 200;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 18px
+    align-items: center;
+    gap: 8px;
+    /* min-width: 10px; */
+    max-width: 500px;
+    justify-content: center;
 }
 
-.stickynote {
-    width: 220px;
-    min-height: 120px;
-    padding: 12px;
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Filters - Fixed below form */
+.filters-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 220px; /* Adjust based on header + form height */
+    z-index: 98;
+    animation: fadeIn 1s ease-out;
+}
+
+.filter-bar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filter-bar select {
+    padding: 10px 15px;
+    border: 2px solid #e1e5e9;
     border-radius: 8px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    position: relative
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.filter-bar select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn-secondary {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: white;
+    border: 2px solid #e74c3c;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+    transform: translateY(-1px);
+}
+
+/* Scrollable Content Area */
+.sticky-board-wrapper {
+    flex: 1;
+    padding: 30px 20px;
+    overflow-y: auto;
+    /*max-height: calc(100vh - 320px); /* Adjust based on fixed elements height */
+    max-height: 300px;
+}
+
+/* Board */
+.board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    padding-bottom: 80px; /* Space for clear button */
+}
+
+/* Sticky Notes */
+.stickynote {
+    background: linear-gradient(145deg, #fff9c4, #fff3a0);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: slideInUp 0.6s ease-out;
+    animation-fill-mode: both;
+    overflow: hidden;
+}
+
+.stickynote::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 15px 15px 0 0;
+}
+
+.stickynote:nth-child(even) {
+    animation-delay: 0.1s;
+}
+
+.stickynote:nth-child(3n) {
+    animation-delay: 0.2s;
+}
+
+.stickynote:hover {
+    transform: translateY(-8px) rotate(1deg);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.stickynote.answered {
+    background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+}
+
+.stickynote.answered::before {
+    background: linear-gradient(90deg, #4caf50, #45a049);
+}
+
+.stickynote.important {
+    background: linear-gradient(145deg, #ffcdd2, #f48fb1);
+}
+
+.stickynote.important::before {
+    background: linear-gradient(90deg, #e91e63, #c2185b);
 }
 
 .note-text {
-    white-space: pre-wrap
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    word-wrap: break-word;
 }
 
 .note-meta {
-    font-size: 12px;
-    color: #555;
-    margin-top: 10px;
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+.author-time {
     display: flex;
-    justify-content: space-between
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
 }
 
 .controls {
     display: flex;
-    gap: 8px
-}
-
-button {
-    cursor: pointer;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 0
-}
-
-input,
-textarea {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    width: 100%
-}
-
-.form {
-    max-width: 540px
-}
-
-.filter-bar {
-    display: flex;
     gap: 8px;
-    align-items: center
-}
-
-/* colors rotation */
-/* .stickynote:nth-child(3n+1) {
-    background: var(--note1)
-}
-
-.stickynote:nth-child(3n+2) {
-    background: var(--note2)
-}
-
-.stickynote:nth-child(3n+3) {
-    background: var(--note3)
-} */ 
-
-body {
-  font-family: sans-serif;
-  background-color: #eff0ea;
-  margin: 0;
-  padding: 0;
-}
-
-.app-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.question-form-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.sticky-board-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
-}
-
-.stickynote {
-  background-color: #fff8a5;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-}
-
-.stickynote.answered { background-color: #a5d6a7; }
-.stickynote.important { background-color: #f48fb1; }
-
-.note-text {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.note-meta {
-  font-size: 0.9rem;
-}
-
-.author-time {
-  margin-bottom: 6px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .controls button {
-  margin-right: 6px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.controls button:hover {
+    transform: translateY(-1px);
+}
+
+.answer-section {
+    margin-top: 15px;
 }
 
 .answer-section textarea {
-  width: 100%;
-  border-radius: 4px;
-  padding: 6px;
-  margin-top: 8px;
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 60px;
+    transition: border-color 0.3s ease;
+}
+
+.answer-section textarea:focus {
+    outline: none;
+    border-color: #667eea;
 }
 
 .answer-section button {
-  margin-top: 6px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.3s ease;
+}
+
+.answer-section button:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
 }
 
 .saved-answer {
-  margin-top: 8px;
-  font-style: italic;
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+
+    /* Fix overflow for long words */
+    word-wrap: break-word;       /* Older syntax, widely supported */
+    overflow-wrap: break-word;   /* Modern standard */
+    word-break: break-all;       /* Optional: breaks anywhere if very long */
 }
-.filters-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+
+
+.saved-answer strong {
+    color: #667eea;
+}
+
+/* Loading and Empty States */
+.loading, .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Animations */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Clear All Button - Smaller and less space */
+.clear-all-wrapper {
+    position: fixed;
+    bottom: 10px; /* Further reduced from 15px */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.9); /* More opaque */
+    backdrop-filter: blur(15px);
+    padding: 4px 8px; /* Further reduced from 8px 15px */
+    border-radius: 15px; /* Smaller radius */
+}
+
+.btn-clear-all {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 6px 12px; /* Further reduced from 10px 20px */
+    border-radius: 6px; /* Smaller radius */
+    font-size: 11px; /* Further reduced from 13px */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px; /* Reduced from 6px */
+}
+
+.btn-clear-all:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+}
+
+/* Responsive Design - Optimized for 80/20 split */
+@media (max-width: 768px) {
+    .header {
+        padding: 6px; /* Even smaller for mobile */
+    }
+
+    .header h1 {
+        font-size: 1.4rem; /* Further reduced from 1.8rem */
+    }
+
+    .header p {
+        font-size: 0.7rem; /* Even smaller for mobile */
+    }
+
+    .question-form-wrapper {
+        top: 40px; /* Much smaller top offset */
+        padding: 6px 10px;
+    }
+
+    .filters-wrapper {
+        top: 90px; /* Adjusted accordingly */
+        padding: 4px 10px;
+    }
+
+    .sticky-board-wrapper {
+        max-height: calc(100vh - 120px); /* Much more space on mobile - was 200px */
+        min-height: 80vh; /* Ensure 80% on mobile too */
+        padding: 10px 8px;
+    }
+
+    .board {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .form {
+        padding: 10px; /* Even smaller on mobile */
+        max-width: 95%; /* Nearly full width on mobile */
+    }
+
+    .form textarea {
+        height: 50px; /* Even smaller on mobile */
+        font-size: 12px;
+    }
+
+    .form input {
+        font-size: 12px;
+    }
+
+    .filter-bar {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 6px 10px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 8px 16px;
+        font-size: 11px;
+    }
+
+    .clear-all-wrapper {
+        bottom: 5px;
+        padding: 3px 6px;
+    }
+
+    .btn-clear-all {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
 }
